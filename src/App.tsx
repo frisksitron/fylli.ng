@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { get } from "@tkrotoff/fetch";
 
 const URL = "https://biapi.nve.no/magasinstatistikk/api/Magasinstatistikk/HentOffentligDataSisteUke";
 
@@ -19,8 +19,8 @@ export interface ReservoirStatisticsModel {
 
 function App() {
   const { data, isLoading, isError } = useQuery(["last_week"], async () => {
-    const response = await axios.get<ReservoirStatisticsModel[]>(URL);
-    const nationalData = response.data.find((x) => x.omrnr === 0 && x.omrType === "NO");
+    const response = await get(URL).json() as ReservoirStatisticsModel[];
+    const nationalData = response.find((x) => x.omrnr === 0 && x.omrType === "NO");
 
     return nationalData;
   });
